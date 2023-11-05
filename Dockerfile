@@ -15,6 +15,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+RUN npx create-next-app
 RUN yarn build
 FROM base AS runner
 WORKDIR /app
