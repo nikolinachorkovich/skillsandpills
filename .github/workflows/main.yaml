@@ -26,9 +26,20 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
+          file: .docker/Dockerfile
           push: true
           tags: nikolinachorkovich/skillsandpills:latest
+
+
+      - name: copy composefile via ssh password
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          source: "docker/compose.yaml"
+          target: "compose.yaml"
 
 
   deploy:
@@ -46,16 +57,19 @@ jobs:
           port: 22
           script: |
             # Stop all running Docker Containers
-            docker kill $(docker ps -q)
+            docker kill $(docker ps -a)
 
             # Free up space
-            docker system prune -a
+            docker system prune -a -f
 
-            # Login to Github Container Registry
-            docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+            # Login to Docker Container Registry
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
             # Pull the Docker Image 
             docker pull ghcr.io/${{ github.repository }}:latest
 
             # Run a new container from a new image
-            docker run -d -p 80:8080 -p 443:443 -t ghcr.io/${{ github.repository }}:latest
+            # docker run -d -p 80:8080 -p 443:443 -t ghcr.io/${{ github.repository }}:latest
+            /usr/local/bin/docker-compose up -d
+
+
