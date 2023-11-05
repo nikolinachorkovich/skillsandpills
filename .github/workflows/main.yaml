@@ -31,10 +31,10 @@ jobs:
           tags: nikolinachorkovich/skillsandpills:latest
 
 
-  deploy_to_digital_ocean_dropplet:
+  deploy:
     name: Deploy to Digital Ocean Droplet
     runs-on: ubuntu-latest
-    needs: push_to_github_container_registry
+    needs: build
 
     steps:
       - name: Deploy to Digital Ocean droplet via SSH action
