@@ -26,10 +26,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: .docker/Dockerfile
+          file: "docker/Dockerfile"
           push: true
           tags: nikolinachorkovich/skillsandpills:latest
-
 
       - name: copy composefile via ssh password
         uses: appleboy/scp-action@v0.1.4
@@ -40,7 +39,6 @@ jobs:
           port: 22
           source: "docker/compose.yaml"
           target: "compose.yaml"
-
 
   deploy:
     name: Deploy to Digital Ocean Droplet
