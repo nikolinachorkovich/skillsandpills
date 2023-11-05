@@ -29,3 +29,33 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: nikolinachorkovich/skillsandpills:latest
+
+
+  deploy_to_digital_ocean_dropplet:
+    name: Deploy to Digital Ocean Droplet
+    runs-on: ubuntu-latest
+    needs: push_to_github_container_registry
+
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            # Stop all running Docker Containers
+            docker kill $(docker ps -q)
+
+            # Free up space
+            docker system prune -a
+
+            # Login to Github Container Registry
+            docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+
+            # Pull the Docker Image 
+            docker pull ghcr.io/${{ github.repository }}:latest
+
+            # Run a new container from a new image
+            docker run -d -p 80:8080 -p 443:443 -t ghcr.io/${{ github.repository }}:latest
