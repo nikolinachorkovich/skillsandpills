@@ -41,7 +41,7 @@ ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
 FROM nginx:1.23.1-alpine AS nginx
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app /usr/share/nginx/html
 COPY --from=builder nginx.conf.template /etc/nginx/conf.d/default.conf
 COPY . .
 EXPOSE 80
