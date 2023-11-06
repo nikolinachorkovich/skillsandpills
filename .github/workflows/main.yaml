@@ -31,14 +31,14 @@ jobs:
           tags: nikolinachorkovich/skillsandpills:latest
 
       - name: copy composefile via ssh password
-        uses: appleboy/scp-action@v0.1.4
+        uses: garygrossgarten/github-action-scp@release
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PRIVATE_KEY }}
+          privateKey: ${{ secrets.PRIVATE_KEY }}
           port: 22
-          source: "docker/compose.yaml"
-          target: "compose.yaml"
+          local: "docker/compose.yaml"
+          remote: "compose.yaml"
 
   deploy:
     name: Deploy to Digital Ocean Droplet
@@ -69,5 +69,3 @@ jobs:
             # Run a new container from a new image
             # docker run -d -p 80:8080 -p 443:443 -t ghcr.io/${{ github.repository }}:latest
             /usr/local/bin/docker-compose up -d
-
-

@@ -15,9 +15,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npx create-next-app
-RUN yarn install --silent
-RUN yarn build
+RUN npx create-next-app \
+    && yarn install --silent \
+    && yarn add sharp \
+    && yarn build
 FROM base AS runner
 WORKDIR /app
 
