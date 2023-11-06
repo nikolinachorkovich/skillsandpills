@@ -30,15 +30,15 @@ jobs:
           push: true
           tags: nikolinachorkovich/skillsandpills:latest
 
-      - name: copy composefile via ssh password
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PRIVATE_KEY }}
-          port: 22
-          local: "docker/compose.yaml"
-          remote: "compose.yaml"
+      # - name: copy composefile via ssh password
+      #   uses: garygrossgarten/github-action-scp@release
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     password: ${{ secrets.PRIVATE_KEY }}
+      #     port: 22
+      #     local: "docker/compose.yaml"
+      #     remote: "compose.yaml"
 
   deploy:
     name: Deploy to Digital Ocean Droplet
