@@ -35,7 +35,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          privateKey: ${{ secrets.PRIVATE_KEY }}
+          password: ${{ secrets.PRIVATE_KEY }}
           port: 22
           local: "docker/compose.yaml"
           remote: "compose.yaml"
