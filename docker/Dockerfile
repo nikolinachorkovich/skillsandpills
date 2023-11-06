@@ -37,9 +37,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3000
-
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "next.config.js"]
+FROM nginx:1.23.1-alpine AS nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder nginx.conf.template /etc/nginx/conf.d/default.conf
+COPY . .
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
