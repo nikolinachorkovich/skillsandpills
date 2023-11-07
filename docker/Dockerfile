@@ -4,6 +4,7 @@ COPY . .
 COPY package.json yarn.lock nginx.conf.template ./
 RUN yarn install \
     && yarn build
+RUN npm install
 
 FROM nginx:1.23.1-alpine
 COPY --from=build-deps /app /usr/share/nginx/html
